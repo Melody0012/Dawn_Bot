@@ -32,7 +32,7 @@ from https://github.com/Jaammerr/The-Dawn-Bot
 - Extended timeout from 60s to 180s (3 minutes) per attempt
 - Each account gets 3 attempts to solve captcha
 - Checks result every 5 seconds (36 checks per attempt)
-- Total maximum time per attempt: 180 seconds
+- Total maximum time per attempt: 3 minutes
 - Total maximum time for all attempts: 9 minutes
 - **highly recommend to use 2Captcha's 100% verification function**, it can resolve the image much faster
 
