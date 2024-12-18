@@ -34,5 +34,8 @@ from https://github.com/Jaammerr/The-Dawn-Bot
 - Checks result every 5 seconds (36 checks per attempt)
 - Total maximum time per attempt: 3 minutes
 - Total maximum time for all attempts: 9 minutes
+- increase the time available for 2Captcha to resolve captchas
 - **highly recommend to use 2Captcha's 100% verification function**, it can resolve the image much faster
 
+### Implementation
+- For implementation details, please refer to the original repository by Jaammerr. This implementation is identical to Jaammerr's repository, except for the addition of the Language.txt and userAgent.txt files.
