@@ -2,7 +2,7 @@
 
 **original author**: Jaammerr  
 
-https://github.com/Jaammerr/The-Dawn-Bot
+from https://github.com/Jaammerr/The-Dawn-Bot
 
 # Changes
 
@@ -24,6 +24,7 @@ https://github.com/Jaammerr/The-Dawn-Bot
      Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/122.0.0.0 Safari/537.36
      ```
    - Maintains consistent browser fingerprint per account
+   - **highly recommend to use 2Captcha's 100% verification function**, it can resolve the image much faster
 
 ## Enhanced Captcha Solving
 
