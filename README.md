@@ -24,7 +24,7 @@ from https://github.com/Jaammerr/The-Dawn-Bot
      Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/122.0.0.0 Safari/537.36
      ```
    - Maintains consistent browser fingerprint per account
-   - **highly recommend to use 2Captcha's 100% verification function**, it can resolve the image much faster
+   
 
 ## Enhanced Captcha Solving
 
@@ -34,4 +34,5 @@ from https://github.com/Jaammerr/The-Dawn-Bot
 - Checks result every 5 seconds (36 checks per attempt)
 - Total maximum time per attempt: 180 seconds
 - Total maximum time for all attempts: 9 minutes
+- **highly recommend to use 2Captcha's 100% verification function**, it can resolve the image much faster
 
