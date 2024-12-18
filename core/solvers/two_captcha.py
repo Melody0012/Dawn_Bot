@@ -1,6 +1,7 @@
 import asyncio
 from typing import Any, Tuple
 import httpx
+from models.config import Config
 
 
 class TwoCaptchaImageSolver:
@@ -8,7 +9,7 @@ class TwoCaptchaImageSolver:
 
     def __init__(self, api_key: str):
         self.api_key = api_key
-        self.client = httpx.AsyncClient(timeout=10)
+        self.client = httpx.AsyncClient(timeout=180)
 
     async def solve(self, image: str) -> Tuple[str, bool]:
         try:
@@ -46,7 +47,10 @@ class TwoCaptchaImageSolver:
     async def get_captcha_result(
         self, task_id: int | str
     ) -> tuple[Any, bool, int | str] | tuple[str, bool, int | str] | tuple[str, bool]:
-        for _ in range(10):
+        check_interval = 5  # Check every 5 seconds
+        max_attempts = 36  # This will give us 180 seconds (3 minutes) with 10-second intervals
+
+        for _ in range(max_attempts):
             try:
                 resp = await self.client.post(
                     f"{self.BASE_URL}/getTaskResult",
@@ -61,7 +65,7 @@ class TwoCaptchaImageSolver:
                 if result.get("status") == "ready":
                     return result["solution"].get("text", ""), True, task_id
 
-                await asyncio.sleep(3)
+                await asyncio.sleep(check_interval)
 
             except httpx.HTTPStatusError as err:
                 return f"HTTP error occurred: {err}", False, task_id

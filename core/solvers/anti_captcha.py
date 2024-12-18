@@ -44,7 +44,7 @@ class AntiCaptchaImageSolver:
             return f"An unexpected error occurred: {err}", False
 
     async def get_captcha_result(self, task_id: int | str) -> Tuple[Any, bool]:
-        for _ in range(10):
+        for _ in range(6):
             try:
                 resp = await self.client.post(
                     f"{self.BASE_URL}/getTaskResult",
@@ -59,7 +59,7 @@ class AntiCaptchaImageSolver:
                 if result.get("status") == "ready":
                     return result["solution"].get("text", ""), True
 
-                await asyncio.sleep(3)
+                await asyncio.sleep(30)
 
             except httpx.HTTPStatusError as err:
                 return f"HTTP error occurred: {err}", False

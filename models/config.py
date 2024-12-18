@@ -60,3 +60,5 @@ class Config(BaseModel):
     captcha_module: Literal["2captcha", "anticaptcha"] = ""
 
     redirect_settings: RedirectSettings
+
+    CAPTCHA_TIMEOUT: int = 180  # Changed from 60 to 180 seconds (3 minutes) to wait for 2captcha response

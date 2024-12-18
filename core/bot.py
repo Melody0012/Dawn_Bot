@@ -13,8 +13,8 @@ from .exceptions.base import APIError, SessionRateLimited, CaptchaSolvingFailed,
 
 
 class Bot(DawnExtensionAPI):
-    def __init__(self, account: Account):
-        super().__init__(account)
+    def __init__(self, account: Account, index: int):
+        super().__init__(account, index)
 
     async def get_captcha_data(self) -> Tuple[str, Any, Optional[Any]]:
         for _ in range(5):
@@ -53,7 +53,7 @@ class Bot(DawnExtensionAPI):
                     f"Account: {self.account_data.email} | Error occurred while solving captcha: {str(e)} | Retrying..."
                 )
 
-        raise CaptchaSolvingFailed("Failed to solve captcha after 5 attempts")
+        raise CaptchaSolvingFailed("Failed to solve captcha after 3 attempts")
 
     async def clear_account_and_session(self) -> None:
         if await Accounts.get_account(email=self.account_data.email):

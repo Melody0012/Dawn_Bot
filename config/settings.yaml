@@ -9,7 +9,7 @@
 # ==================
 # Essential application parameters that control basic functionality
 
-threads: 30                    # Number of worker threads for concurrent operations
+threads: 8                    # Number of worker threads for concurrent operations
                               # Minimum: 1, Recommended: 10-50 based on system resources
 
 keepalive_interval: 120       # Keepalive signal frequency in seconds
@@ -25,7 +25,7 @@ referral_codes:              # List of referral codes for tracking and rewards
 
 redirect_settings:
   enabled: false             # Master switch for mail redirection functionality
-  email: "test@gmail.com"    # Primary redirect email address
+  email: "testtest@gmail.com"    # Primary redirect email address
   password: "password"       # Authentication credentials (store securely!)
   imap_server: "imap.gmail.com"  # IMAP server for mail retrieval
   use_proxy: true           # Enable proxy support for enhanced privacy

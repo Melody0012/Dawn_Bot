@@ -11,25 +11,40 @@ from curl_cffi.requests import AsyncSession
 from models import Account
 from .exceptions.base import APIError, SessionRateLimited, ServerError
 from loader import captcha_solver, config
-
+from utils.file_utils import load_user_agents, load_farm_data, load_languages
 
 class DawnExtensionAPI:
     API_URL = "https://www.aeropres.in/chromeapi/dawn"
 
-    def __init__(self, account: Account):
+    def __init__(self, account: Account, index: int):
         self.account_data = account
         self.wallet_data: dict[str, Any] = {}
+        self.user_agents = load_user_agents('config/data/userAgent.txt')
+        self.farm_data = load_farm_data('config/data/farm.txt')
+        try:
+            self.languages = load_languages('config/data/Language.txt')
+        except FileNotFoundError:
+            self.languages = ["en-US,en;q=0.9"]  # Default if file not found
+        
+        if index >= len(self.user_agents):
+            raise ValueError(f"Index {index} is out of bounds for user_agents list (length: {len(self.user_agents)})")
+        self.index = index
+        
         self.session = self.setup_session()
 
     def setup_session(self) -> AsyncSession:
-        session = AsyncSession(impersonate="chrome124", verify=False)
-        session.timeout = 30
+        user_agent = self.user_agents[self.index]
+        # Use the same index for language as user_agent
+        language = self.languages[self.index % len(self.languages)]  # Use modulo in case we have fewer languages than user agents
+        
+        session = AsyncSession(impersonate="chrome124", verify=False)  # 2captcha sees this
+        session.timeout = 180
         session.headers = {
             "accept": "*/*",
-            "accept-language": "en-US,en;q=0.9",
+            "accept-language": language,  # Use matching language by index
             "origin": "chrome-extension://fpdkjdnhkakefebpekbdhillbhonfjjp",
             "priority": "u=1, i",
-            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+            "user-agent": user_agent,  # Dawn sees this version from userAgent.txt
         }
 
         if self.account_data.proxy:
@@ -41,8 +56,18 @@ class DawnExtensionAPI:
         return session
 
     async def clear_request(self, url: str):
-        session = AsyncSession(impersonate="chrome124", verify=False, timeout=30)
+        user_agent = self.user_agents[self.index]
+        language = self.languages[self.index % len(self.languages)]  # Use same language as setup_session
+        
+        chrome_version = user_agent.split("Chrome/")[1].split(".")[0]
+        
+        session = AsyncSession(impersonate=f"chrome{chrome_version}", verify=False, timeout=30)
         session.proxies = self.session.proxies
+        session.headers = {
+            "accept": "*/*",
+            "accept-language": language,  # Use matching language by index
+            "user-agent": user_agent,
+        }
 
         response = await session.get(url)
         return response

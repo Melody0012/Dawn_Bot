@@ -1,4 +1,5 @@
 import asyncio
+import os
 
 import aiofiles
 
@@ -120,3 +121,31 @@ class FileOperations:
 
             except IOError as e:
                 print(f"Error writing to file: {e}")
+
+def load_user_agents(file_path: str) -> list:
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"User-Agent file not found: {file_path}")
+        
+    with open(file_path, 'r') as file:
+        user_agents = [line.strip() for line in file if line.strip()]
+        
+    if not user_agents:
+        raise ValueError("User-Agent file is empty")
+        
+    return user_agents
+
+def load_farm_data(file_path: str) -> list:
+    with open(file_path, 'r') as file:
+        return [line.strip() for line in file if line.strip()]
+
+def load_languages(file_path: str) -> list:
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"Language file not found: {file_path}")
+        
+    with open(file_path, 'r') as file:
+        languages = [line.strip() for line in file if line.strip()]
+        
+    if not languages:
+        raise ValueError("Language file is empty")
+        
+    return languages

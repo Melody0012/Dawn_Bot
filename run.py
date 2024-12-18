@@ -16,12 +16,12 @@ accounts_with_initial_delay: Set[str] = set()
 
 
 async def run_module_safe(
-        account: Account, process_func: Callable[[Bot], Coroutine[Any, Any, Any]]
+        account: Account, process_func: Callable[[Bot], Coroutine[Any, Any, Any]], index: int
 ) -> Any:
     global accounts_with_initial_delay
 
     async with semaphore if config.redirect_settings.enabled is False else single_semaphore:
-        bot = Bot(account)
+        bot = Bot(account, index)
         await account.init_appid()
         try:
             if config.delay_before_start.min > 0:
@@ -69,7 +69,7 @@ async def process_complete_tasks(bot: Bot) -> None:
 async def run_module(
         accounts: List[Account], process_func: Callable[[Bot], Coroutine[Any, Any, Any]]
 ) -> tuple[Any]:
-    tasks = [run_module_safe(account, process_func) for account in accounts]
+    tasks = [run_module_safe(account, process_func, index) for index, account in enumerate(accounts)]
     return await asyncio.gather(*tasks)
 
 
